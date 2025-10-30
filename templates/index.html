@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}To-Do List{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <form action="{{ url_for('add') }}" method="post" class="mb-4">
+                <div class="input-group">
+                    <input type="text" name="todo" class="form-control" placeholder="Add a new to-do item" required>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+            </form>
+            <ul class="list-group">
+                {% for todo in todos %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <form action="{{ url_for('toggle', id=todo.id) }}" method="post" style="display: inline;">
+                            <input type="checkbox" {% if todo.done %}checked{% endif %} onchange="this.form.submit();">
+                        </form>
+                        <span class="{% if todo.done %}text-decoration-line-through{% endif %}">{{ todo.task }}</span>
+                    </div>
+                    <div>
+                        <a href="{{ url_for('edit', id=todo.id) }}" class="btn btn-sm btn-warning">Edit</a>
+                        <a href="{{ url_for('delete', id=todo.id) }}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock %}
